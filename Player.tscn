@@ -1,0 +1,68 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://dodge_assets/art/playerGrey_up2.png" type="Texture" id=1]
+[ext_resource path="res://dodge_assets/art/playerGrey_walk1.png" type="Texture" id=2]
+[ext_resource path="res://dodge_assets/art/playerGrey_walk2.png" type="Texture" id=3]
+[ext_resource path="res://dodge_assets/art/playerGrey_up1.png" type="Texture" id=4]
+[ext_resource path="res://Player.gd" type="Script" id=5]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0.891473, 1 )
+colors = PoolColorArray( 1, 1, 1, 0.482353, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="Curve" id=6]
+_data = [ Vector2( 0, 0.542045 ), 0.0, 0.0, 0, 0, Vector2( 0.953947, 0.514773 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=7]
+curve = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 7 )
+color_ramp = SubResource( 5 )
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 4 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "up",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "walk",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 27.1783
+height = 17.4759
+
+[node name="Player" type="Area2D"]
+position = Vector2( -1.25992, 0 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Particles2D" type="Particles2D" parent="."]
+speed_scale = 4.0
+local_coords = false
+process_material = SubResource( 3 )
+texture = ExtResource( 4 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 1 )
+animation = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
